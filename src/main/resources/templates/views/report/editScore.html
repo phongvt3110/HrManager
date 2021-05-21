@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Castis manager</title>
+<link rel="stylesheet" type="text/css" th:href="@{/public/bootstrap_4_3_1/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/public/css/mycss.css}"/>
+<script th:src="@{/public/js/jquery36.js}"></script>
+<script th:src="@{/public/js/myjs.js}"></script>
+</head>
+<body>
+<header>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" th:href="@{/home}"><img alt=""
+			th:src="@{/public/images/logo/logo.png}"></a>				
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#my-nav-bar" aria-controls="my-nav-bar"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="my-nav-bar">
+			<!--HTML các thành phần trình bày trên Navbar-->
+			<ul class="nav navbar-color">												
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin/user}">User</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin}">Daily report</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin/profile}">Statistic</a>
+				</li>
+			</ul>
+		</div>
+		<div class="user-authenticated" sec:authorize="isAuthenticated()">
+			Authenticated as <b><span sec:authentication="name">Anonymous</span></b>
+			with role&nbsp;<span sec:authentication="principal.authorities">Roles</span>
+		</div>
+		<div class="right-side">
+			<a href="javascript: logoutForm.submit()"><button type="button" class="btn btn-success">Logout</button></a>			
+			<form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">				
+				<input type="submit" value="Logout"/>
+			</form>			
+		</div>
+	</nav>
+</header>
+	
+<div class="container" style="margin-top: 50px;">	
+	<div class="col-md-5 mx-auto">
+		<div class="myform form ">
+			 <div class="logo mb-3">
+				 <div class="col-md-12 text-center">
+					<h3 style = "color: green; ">Edit Score</h3>
+				 </div>
+			 </div>		
+			<form th:action="@{/admin/report/edit}" th:object="${report}" method="post">				
+				<div class="form-group">
+                   <label for="score">Score</label>
+                   <input type="text" class="form-control" placeholder="Enter score" th:field="*{score}"/>                                     
+                </div>                                               
+                <input type="hidden" th:field=*{id}>                                          	                              
+                <div class="col-md-12 text-center">
+                	<div style="float: left;"><a class="btn btn-block mybtn btn-primary tx-tfm" th:href="@{/admin}">Cancel</a></div>
+                	<div style="float: right;"><button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Submit</button></div>	                   
+                </div>							
+			</form>		
+		</div>
+	</div>												
+</div>
+</body>
+</html>

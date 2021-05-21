@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Castis manager</title>
+<link rel="stylesheet" type="text/css" th:href="@{/public/bootstrap_4_3_1/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/public/css/mycss.css}"/>
+<script th:src="@{/public/js/jquery36.js}"></script>
+<script th:src="@{/public/js/myjs.js}"></script>
+</head>
+<body>
+<header>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" th:href="@{/home}"><img alt=""
+			th:src="@{/public/images/logo/logo.png}"></a>				
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#my-nav-bar" aria-controls="my-nav-bar"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="my-nav-bar">
+			<!--HTML các thành phần trình bày trên Navbar-->
+			<ul class="nav navbar-color">
+				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Home</a>
+				</li>								
+				<li class="nav-item"><a class="nav-link" th:href="@{/addmin}">Daily report</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin/user}">User</a>
+				</li>
+			</ul>
+		</div>
+		<div class="user-authenticated" sec:authorize="isAuthenticated()">
+			Authenticated as <b><span sec:authentication="name">Anonymous</span></b>
+			with role&nbsp;<span sec:authentication="principal.authorities">Roles</span>
+		</div>
+		<div class="right-side">
+			<a th:href="@{/logout}"><button type="button" class="btn btn-success">Logout</button></a>
+		</div>
+	</nav>
+</header>
+<div class="container-fluid">
+	<div class="center">
+		<h1 style="color: green;">Castis HR management</h1>
+		<h3 style="color: green;">User created successfully</h3>
+		<button type="button" th:onclick="pageRedirect('/admin/user')" class="btn btn-primary">Go to user screen</button>
+	</div>	
+</div>
+</body>
+</html>

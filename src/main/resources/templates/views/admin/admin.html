@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Admin</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/public/bootstrap_4_3_1/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/public/css/mycss.css}" />
+<!-- <link rel="stylesheet" type="text/css" th:href="@{/public/bootstrap_4_3_1/css/bootstrap-multiselect.css}" /> -->
+<link rel="stylesheet" type="text/css" th:href="@{/public/select2/css/select2.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/public/css/bootstrap-datetimepicker.min.css}" />
+
+<script th:src="@{/public/js/jquery36.js}"></script>
+<script th:src="@{/public/js/myjs.js}"></script>
+<script th:src="@{/public/bootstrap_4_3_1/js/bootstrap.bundle.min.js}"></script>
+<!-- <script th:src="@{/public/bootstrap_4_3_1/js/bootstrap-multiselect.js}"></script> -->
+<script th:src="@{/public/select2/js/select2.js}"></script>
+<script th:src="@{/public/js/bootstrap-datetimepicker.min.js}"></script>
+</head>
+<script type="text/javascript">
+	function next(currentPage) {
+		$('input[name=page]').val(currentPage+1);
+		$('button#Search').trigger('click');
+	}
+
+</script>
+<body>
+<header>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" th:href="@{/home}"><img alt=""
+			th:src="@{/public/images/logo/logo.png}"></a>				
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#my-nav-bar" aria-controls="my-nav-bar"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="my-nav-bar">
+			<!--HTML các thành phần trình bày trên Navbar-->
+			<ul class="nav navbar-color">				
+				<li class="nav-item"><a class="nav-link active"
+					th:href="@{/admin/user}">User</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin/project}">Project</a>
+				</li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin}">Daily report</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin/profile}">Statistic</a></li>
+			</ul>
+		</div>
+		<div class="user-authenticated" sec:authorize="isAuthenticated()">
+			Authenticated as <b><span sec:authentication="name">Anonymous</span></b>
+			with role&nbsp;<span sec:authentication="principal.authorities">Roles</span>
+		</div>		
+		<div class="right-side">
+			<a href="javascript: logoutForm.submit()"><button type="button" class="btn btn-success">Logout</button></a>			
+			<form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">				
+				<input type="submit" value="Logout"/>
+			</form>								
+		</div>
+	</nav>
+</header>
+<div class="container-fluid">
+	<div class="center">
+		<h1 style="color: green;">Castis HR management</h1>		
+		<h3 style="color: green;">Employee list</h3>
+	</div>
+
+	<div class="row">
+	<div class="col-md-12 mx-auto">
+			<div style="margin-bottom: 30px;">
+				<form th:action="@{/admin/search}" method="get" name="searchForm">
+					<div class="row form-group">
+						<div class="col-md-2">
+							<label for="reporter">Reporter</label>
+							<select class="form-control" name = "reporter">
+								<option value="">Please select...</option>	                   		
+		                   		<option th:each="reporter : ${users}" th:value="${reporter.fullName}" th:text="${reporter.fullName}" th:selected="${reporter.fullName == reporterName}"></option>
+		                   	</select>		                   												               
+						</div>
+						<div class="col-md-2">
+							<label for="project">Project</label>
+							<select class="form-control" name = "project" multiple="multiple" id="projects-multi-select">									                   	
+		                   		<option th:each="project : ${projects}" th:value="${project.projectName}" th:text="${project.projectName}"></option>		                   		
+		                   	</select>			               	
+						</div>
+						<div class="col-md-2">
+							<label for="position">Position</label>
+							<select class="form-control" name = "position">
+								<option value="">Please select...</option>	                   		
+		                   		<option th:each="position : ${positions}" th:value="${position.positionName}" th:text="${position.positionName}"  th:selected="${position.positionName == pos}"></option>
+		                   </select>			               	
+						</div>
+						<!-- <div class="col-md-2">
+							<label for="project">Project</label>
+							<select class="form-control" id="example-getting-started" multiple="multiple">													    
+							    <option th:each="project : ${projects}" th:value="${project.projectName}" th:text="${project.projectName}" th:selected="${project.projectName == prj}"></option>
+							</select>
+						</div>  -->						
+						<input type="hidden" name="page" th:value="1">															    
+						<div class="col-md-1" style=" margin-top: 32px;">
+							<button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Search</button>
+						</div>
+					</div>
+				</form>
+			</div>		
+		
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-hover table-sm">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Issued date</th>
+						<th scope="col">Reporter</th>
+						<th scope="col">Project</th>
+						<th scope="col">Position</th>
+						<th scope="col">Work details</th>
+						<th scope="col">Time required</th>
+						<th scope="col">Score</th>
+						<th scope="col">Level of work</th>
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="report : ${reports}">
+						<th scope="row" th:text="*{report.getId()}"></th>
+						<td th:text="*{report.getIssuedDate()}"></td>
+						<td th:text="*{report.getReporter()}"></td>
+						<td th:text="*{report.getProject()}"></td>
+						<td th:text="*{report.getPosition()}"></td>
+						<td th:text="*{report.getWorkDetails()}"></td>
+						<td th:text="*{report.getTimeRequired() + 'MD'}"></td>
+						<td th:text="*{report.getScore() + 'MD'}"></td>
+						<td th:text="*{report.getLevelOfWork()}"></td>
+						<td>
+				      	<a class="a-action" th:href="@{'/admin/report/edit/' + *{report.getId()}}">Edit</a>				      					      
+				      </td>
+					</tr>
+				</tbody>
+			</table>		
+		</div>
+		<nav aria-label="Page navigation example">
+		  <ul class="pagination justify-content-end">
+		    <li class="page-item" th:if="${currentPage > 1}">
+		      <a class="page-link" th:href="@{'/admin?page=' + ${currentPage - 1}}" tabindex="-1">Previous</a>
+		    </li>
+		    <li class="page-item" th:unless="${currentPage > 1}">
+		    	<label class="page-link" th:text="Previous"></label>
+		    </li>
+		    <li class="page-item" th:each="page: ${pageable}"><a class="page-link" th:href="@{'/admin?page=' + *{page}}" th:text="*{page}"></a></li>		    
+		    <li class="page-item" th:if="${currentPage < reports.getTotalPages()}">
+		      <a class="page-link" th:href="@{'/admin?page=' + ${currentPage + 1}}">Next</a>
+		    </li>
+		    <li class="page-item" th:unless="${currentPage < reports.getTotalPages()}">
+		    	<label class="page-link" th:text="Next"></label>
+		    </li>
+		  </ul>
+		</nav>
+	</div>
+	</div>	
+</div>
+
+<script th:inline="javascript">
+	var prjs = /*[[${prjs}]]*/;	
+    $(document).ready(function() {    
+        $('#projects-multi-select').select2({
+        	placeholder: 'Please select...'        	
+        }).val(prjs).change();        
+    });      
+</script>
+</body>
+</html>

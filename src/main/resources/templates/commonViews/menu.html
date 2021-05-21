@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Castis manager</title>
+<link rel="stylesheet" type="text/css" th:href="@{/public/bootstrap_4_3_1/css/bootstrap.min.css}"/>
+<script th:src="@{/public/js/jquery36.js}"></script>
+<script th:src="@{/public/js/myjs.js}"></script>
+<style type="text/css">
+	.left-side{	
+		float: left;					
+	}
+	.right-side{
+		float: right;					
+	}
+	.parrent{
+		display: block;
+	}
+	.center{
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+<div class="parrent">
+	<div class="right-side">
+		<a href="javascript: logoutForm.submit()"><button type="button" class="btn btn-success">Logout</button></a>			
+		<form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">				
+			<input type="submit" value="Logout"/>
+		</form>								
+	</div>	
+	<div class="feft-side">
+		<div class="center">
+			<h1 style = "color: green; ">Castis HR management</h1>	
+			<h1 style = "color: green; ">Menu</h1>
+			<h2 style="color: green;" th:text="${msg}"></h2>
+			<div class="table-responsive">
+				<table class="table table-striped table-hover table-sm">
+				  <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">First</th>
+				      <th scope="col">Last</th>
+				      <th scope="col">Handle</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">1</th>
+				      <td>Mark</td>
+				      <td>Otto</td>
+				      <td>@mdo</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">2</th>
+				      <td>Jacob</td>
+				      <td>Thornton</td>
+				      <td>@fat</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">3</th>
+				      <td>Larry</td>
+				      <td>the Bird</td>
+				      <td>@twitter</td>
+				    </tr>
+				  </tbody>
+				</table>
+			</div>			
+		</div>
+	</div>	
+	<button type="button" th:onclick="showAlert(nameJs);" class="btn btn-primary">Show Alert</button>
+</div>
+<script th:inline="javascript">
+    var nameJs = /*[[${name}]]*/;
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Daily report</title>
+<link rel="stylesheet" type="text/css" th:href="@{/public/bootstrap_4_3_1/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/public/css/mycss.css}"/>
+<script th:src="@{/public/js/jquery36.js}"></script>
+<script th:src="@{/public/js/myjs.js}"></script>
+<script th:src="@{/public/chart/chart.js}"></script>
+<script th:src="@{/public/chart/chart.esm.js}"></script>
+<script th:src="@{/public/gijgo/js/gijgo.js}" type="text/javascript"></script>
+<link th:href="@{/public/gijgo/css/gijgo.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<header>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" th:href="@{/home}"><img alt=""
+			th:src="@{/public/images/logo/logo.png}"></a>				
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#my-nav-bar" aria-controls="my-nav-bar"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="my-nav-bar">
+			<!--HTML các thành phần trình bày trên Navbar-->
+			<ul class="nav navbar-color">
+				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Home</a>
+				</li>
+				<li class="nav-item"><a class="nav-link active"
+					th:href="@{/user}">User</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/project}">Project</a>
+				</li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin}">Daily report</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin/profile}">Profile</a></li>
+			</ul>
+		</div>
+		<div class="user-authenticated" sec:authorize="isAuthenticated()">
+			Authenticated as <b><span sec:authentication="name">Anonymous</span></b>
+			with role&nbsp;<span sec:authentication="principal.authorities">Roles</span>
+		</div>		
+		<div class="right-side">
+			<a href="javascript: logoutForm.submit()"><button type="button" class="btn btn-success">Logout</button></a>			
+			<form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">				
+				<input type="submit" value="Logout"/>
+			</form>								
+		</div>
+	</nav>
+</header>
+
+<div class="container-fluid">
+	<div class="center">
+		<h1 style="color: green;">Castis HR management</h1>
+		<h3 style="color: green;">Admin profile</h3>
+	</div>		
+	<div style="margin: 50px 300px; display: block;">
+		<div style="display: inline;">
+			<input id="inputFrom" width="200" />
+		    <script>
+		        $('#inputFrom').datepicker({
+		            uiLibrary: 'bootstrap4',
+		            modal: true,
+		            footer: false
+		        });
+		    </script>
+		</div>
+		
+		<div style="display: inline;">
+			<input id="inputTo" width="200" />
+		    <script>
+		        $('#inputTo').datepicker({
+		            uiLibrary: 'bootstrap4',
+		            modal: true,
+		            footer: false
+		        });
+		    </script>
+		</div>		
+	</div>
+	<div style="display: block;">
+	<div style="width: 600px; height: 600px; display: inline; float: left;">
+		<canvas id="myChart"></canvas>
+	</div>	
+	<div style="width: 300px; height: 300px; display: inline; float: left; margin-left: 150px;">
+		<canvas id="myPieChart"></canvas>
+	</div>
+	</div>
+	<script>
+	var ctx = document.getElementById('myChart').getContext('2d');
+	var pie_ctx = document.getElementById('myPieChart').getContext('2d');
+	var myChart = new Chart(ctx, {
+	    type: 'bar',
+	    data: {
+	        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+	        datasets: [{
+	            label: 'Tasks in month',
+	            data: [12, 19, 3, 5, 2, 3, 7, 8, 15, 17, 11, 18],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)',
+	                'rgba(255, 206, 86, 0.2)',
+	                'rgba(75, 192, 192, 0.2)',
+	                'rgba(153, 102, 255, 0.2)',
+	                'rgba(255, 159, 64, 0.2)',
+	                'rgba(125, 180, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)',
+	                'rgba(255, 206, 86, 0.2)',
+	                'rgba(75, 192, 192, 0.2)',
+	                'rgba(125, 125, 125, 0.5)',
+	                'rgba(0, 0, 0, 0.5)'
+	            ],
+	            borderColor: [
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(255, 206, 86, 1)',
+	                'rgba(75, 192, 192, 1)',
+	                'rgba(153, 102, 255, 1)',
+	                'rgba(255, 159, 64, 1)',
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(255, 206, 86, 1)',
+	                'rgba(75, 192, 192, 1)',
+	                'rgba(153, 102, 255, 1)',
+	                'rgba(255, 159, 64, 1)'
+	            ],
+	            borderWidth: 2
+	        }]
+	    },
+	    options: {
+	        scales: {
+	            y: {
+	                beginAtZero: true
+	            }
+	        }
+	    }
+	});
+	var myPieChart = new Chart(pie_ctx, {
+	    type: 'pie',
+	    data: {
+	        labels: ['SLA', 'BMS', 'SPOTX', 'CMS', 'VIETTEL-PO5', 'VIETTEL-VOD'],
+	        datasets: [{
+	            label: 'Work performance',
+	            data: [12, 19, 3, 5, 2, 3],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.8)',
+	                'rgba(54, 162, 235, 0.8)',
+	                'rgba(255, 206, 86, 0.8)',
+	                'rgba(75, 192, 192, 0.8)',
+	                'rgba(153, 102, 255, 0.8)',
+	                'rgba(255, 125, 0, 0.8)'	                
+	            ],
+	            borderColor: [
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(255, 206, 86, 1)',
+	                'rgba(75, 192, 192, 1)',
+	                'rgba(153, 102, 255, 1)',
+	                'rgba(255, 159, 64, 1)'	                
+	            ],
+	            borderWidth: 2
+	        }]
+	    },
+	    options: {
+	        scales: {
+	            y: {
+	                beginAtZero: true
+	            }
+	        }
+	    }
+	});
+	</script>	
+</div>
+</body>
+</html>

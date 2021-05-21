@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Forbidden</title>
+<link rel="stylesheet" type="text/css" th:href="@{/public/bootstrap_4_3_1/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/public/css/mycss.css}"/>
+<script th:src="@{/public/js/jquery36.js}"></script>
+<script th:src="@{/public/js/myjs.js}"></script>
+<style type="text/css">
+	button{
+		background-color: green;
+		color: white;
+	}
+	div{ 
+		padding: 10px;
+	}
+</style>
+</head>
+<body>
+<div style = "color: green; text-align: center;">
+	<h1 style = "color: green; text-align: center;">Castis HR management</h1>
+	<h1 style = "color: green; text-align: center;">Sorry, you don't have permission to access this page </h1>	
+	<div><a class="btn btn-success" th:href="@{/home}">Go home</a></div>
+	<div><a th:href="@{/}"><button type="button" class="btn btn-primary">Go to list page</button></a></div>
+</div>
+</body>
+</html>
