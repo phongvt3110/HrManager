@@ -24,27 +24,27 @@ import castisvn.entities.Report;
 @Transactional
 public interface ReportRepository extends JpaRepository<Report, Integer>, JpaSpecificationExecutor<Report>{
 	@Query("SELECT r FROM Report r WHERE r.userId = :userId ORDER BY r.issuedDate DESC")
-	public Page<Report> getReportByUserId(@Param("userId") Integer userId, Pageable page);
+	Page<Report> getReportByUserId(@Param("userId") Integer userId, Pageable page);
 	
 	@Query(value = "select * from daily_report order by issued_date desc", nativeQuery = true)
-	public List<Report> findAllDescIssuedDate();
+	List<Report> findAllDescIssuedDate();
 		
 	@Query("SELECT r FROM Report r WHERE r.reporter = :reporter ORDER BY r.issuedDate DESC")
-	public List<Report> findAllByReporter(@Param(value = "reporter") String reporter);
+	List<Report> findAllByReporter(@Param(value = "reporter") String reporter);
 	
 	@Query("SELECT r FROM Report r WHERE r.userId = :userId ORDER BY r.issuedDate DESC")
-	public List<Report> findAllByUserId(@Param(value = "userId") String reporterId);
+	List<Report> findAllByUserId(@Param(value = "userId") String reporterId);
 	
 	@Query(value = "SELECT * FROM daily_report  WHERE project in (:project) ORDER BY issued_date DESC", nativeQuery = true)
-	public List<Report> findAllByProjectInList(@Param(value = "project") ArrayList<String> project);
+	List<Report> findAllByProjectInList(@Param(value = "project") ArrayList<String> project);
 	
 	@Query("SELECT r FROM Report r WHERE r.position = :position ORDER BY r.issuedDate DESC")
-	public List<Report> findAllByPosition(@Param(value = "position") String position);
+	List<Report> findAllByPosition(@Param(value = "position") String position);
 	
 	@Query("SELECT r FROM Report r WHERE (:reporter = '' or :reporter is null or r.reporter = :reporter) and (coalesce(:project) is null or r.project in (:project) ) and (:position = '' or :position is null or r.position = :position) ORDER BY r.issuedDate DESC")
-	public Page<Report> findAllByCondition(@Param(value = "reporter") String reporter, @Param(value = "project") ArrayList<String> project, @Param(value = "position") String postion, Pageable pageable);
+	Page<Report> findAllByCondition(@Param(value = "reporter") String reporter, @Param(value = "project") ArrayList<String> project, @Param(value = "position") String postion, Pageable pageable);
 	
-	public default Page<Report> findByCriteria(String reporter, ArrayList<String> project, String position, Pageable pageable){
+	default Page<Report> findByCriteria(String reporter, ArrayList<String> project, String position, Pageable pageable){
 		return findAll(new Specification<Report>() {
 			
 			/**
@@ -69,11 +69,11 @@ public interface ReportRepository extends JpaRepository<Report, Integer>, JpaSpe
 			}
 		}, pageable);
 	}
-	public default Page<Report> findBySpecs(String reporter, ArrayList<String> project, String position, Pageable pageable){
+	default Page<Report> findBySpecs(String reporter, ArrayList<String> project, String position, Pageable pageable){
 		return findAll(ReportSpecs.filterByReporterProjectPosition(reporter, project, position),pageable);
 	}
 	
-	public default Page<Report> findBySpecsAndLevel(String reporter, ArrayList<String> project, String position, String level, String sort,Pageable pageable){
+	default Page<Report> findBySpecsAndLevel(String reporter, ArrayList<String> project, String position, String level, String sort,Pageable pageable){
 		return findAll(Specification.where(ReportSpecs.filterByReporterProjectPosition(reporter, project, position)).and(ReportSpecs.hasLevelOfWork(level, sort)) ,pageable);
 	}
 }
