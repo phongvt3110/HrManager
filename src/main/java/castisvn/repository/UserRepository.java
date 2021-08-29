@@ -1,6 +1,7 @@
 package castisvn.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -15,11 +16,11 @@ import castisvn.entities.User;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT u FROM User u WHERE u.username = :username or u.email = :username")
-	public User getUserByUsername(@Param("username") String username);
+	Optional<User> getUserByUsername(@Param("username") String username);
 	
 	@Query("SELECT u FROM User u WHERE u.email = :email")
-	public User getUserByEmail(@Param("email") String email);
+	User getUserByEmail(@Param("email") String email);
 	
 	@Query(value = "select user.* from user inner join daily_report on user.id = daily_report.user_id group by daily_report.user_id", nativeQuery = true)
-	public List<User> getListUsers();
+	List<User> getListUsers();
 }

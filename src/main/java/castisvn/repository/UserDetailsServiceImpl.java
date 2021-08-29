@@ -1,5 +1,6 @@
 package castisvn.repository;
 
+//import castisvn.commonUtils.EmailFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,17 +16,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username_or_email) throws UsernameNotFoundException {		
 		
-//		User user = new User();	
-//		if(username.contains("@")) {
+//		User user = new User();
+//		if(EmailFormat.checkEmailValidFormat(username_or_email)) {
 //			user = userRepository.getUserByEmail(username_or_email);
 //		} else {
-//			user = userRepository.getUserByUsername(username_or_email);
+//			user = userRepository.getUserByUsername(username_or_email)
+//			.orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
 //		}
 		
-		User user = userRepository.getUserByUsername(username_or_email);		
-		if(user == null) {
-			throw new UsernameNotFoundException("Could not find user");
-		}
+		User user = userRepository.getUserByUsername(username_or_email)
+				.orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
 		return new MyUserDetails(user);
 	}
 
